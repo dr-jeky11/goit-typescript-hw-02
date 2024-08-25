@@ -1,11 +1,11 @@
-import toast, { Toaster } from "react-hot-toast";
-
+import toast from "react-hot-toast";
+import { FormEvent, ReactElement } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { RiStarFill } from "react-icons/ri";
 
 import s from "./SearchBar.module.css";
 
-const notify = () =>
+const notify = (): string =>
   toast.error("Please enter your query.", {
     duration: 2000,
     style: {
@@ -19,10 +19,22 @@ const notify = () =>
     },
   });
 
-export default function SearchBar({ onSearch, onShowFav }) {
-  const handleSubmit = (e) => {
+interface Props {
+  onSearch: (query: string) => void;
+  onShowFav: () => void;
+}
+
+export default function SearchBar({
+  onSearch,
+  onShowFav,
+}: Props): ReactElement {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const inputValue = e.target.elements.search.value.trim();
+
+    const form = e.currentTarget as HTMLFormElement;
+    const inputValue: string = (
+      form.elements.namedItem("search") as HTMLInputElement
+    ).value.trim();
 
     if (inputValue === "") {
       notify();
@@ -31,7 +43,7 @@ export default function SearchBar({ onSearch, onShowFav }) {
 
     onSearch(inputValue);
 
-    e.target.reset();
+    (e.target as HTMLFormElement).reset();
   };
 
   const handleShowFav = () => {
