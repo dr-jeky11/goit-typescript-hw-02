@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Response } from "./types";
 
 export async function fetchPhotos(
   query: string,
